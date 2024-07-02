@@ -30,10 +30,10 @@ jobs:
           echo "$PRIVATE_KEY" > key && chmod 600 key
           ssh -o StrictHostKeyChecking=no -i key ${USER_NAME}@${HOSTNAME} '
 
-          docker pull ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
           docker stop ${{ github.event.repository.name }} || true
           docker rm ${{ github.event.repository.name }} || true
           docker rmi ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} || true
-          docker run -d --name ${{ github.event.repository.name }} -p 3000:3000 ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+          docker pull ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+          docker run -d --name ${{ github.event.repository.name }} -p 80:3000 ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
 
           '
