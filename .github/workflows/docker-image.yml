@@ -28,7 +28,7 @@ jobs:
           USER_NAME: ${{ secrets.USER_NAME }}
         run: |
           echo "$PRIVATE_KEY" > key && chmod 600 key
-          ssh -i key ${USER_NAME}@${HOSTNAME} '
+          ssh -o StrictHostKeyChecking=no -i key ${USER_NAME}@${HOSTNAME} '
 
           docker pull ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
           docker stop ${{ github.event.repository.name }} || true
