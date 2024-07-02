@@ -26,14 +26,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: ssh to server
+      - name: SSH and deploy
         env:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           HOSTNAME: ${{ secrets.SSH_HOST }}
           USER_NAME: ${{ secrets.USER_NAME }}
         run: |
           echo "$PRIVATE_KEY" > key && chmod 600 key
-          ssh -o StrictHostKeyChecking=no -i key ${USER_NAME}@${HOSTNAME} '
+          ssh -i key ${USER_NAME}@${HOSTNAME} '
 
           docker pull ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
           docker stop ${{ github.event.repository.name }} || true
